@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	  <meta charset="UTF-8">
+    <title>New York</title>
+
+    <meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+    <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="css/dc.css"/>
+  <script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css' rel='stylesheet' />
+
+  <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&family=Raleway:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@700&family=Coda+Caption:wght@800&family=Hammersmith+One&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+        crossorigin="anonymous">
+</script>
+<script src="js/jquery.mousefollow.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script type="text/javascript" src="js/d3.js"></script>
+<script type="text/javascript" src="js/queue.v1.min.js"></script>
+    <style>
+		body{
+			font-family:helvetica;
+			font-weight:100;
+			font-size:11px;
+		}
+        #title{
+          font-size:36px;
+			font-weight:100;
+        }
+		.sectionTitle{
+			font-size:16px;
+			width:300px;
+		}
+		.section{
+			margin:20px;
+		}
+		.sectionIntro{
+			width:400px;
+		}
+		#tooltip{
+			visibility:hidden;
+			position:absolute;
+			z-index:1;
+			width:80px;
+			background-color:rgba(255,255,255,.8);
+			padding:5px;
+		}
+</style>
+
+</head>
+
+<body>
+
+<div id="intro">
+<div id="title">Census Geography</div>
+<!-- <div id="subtitle">Here is a quick overview of 4 types of Census Geography -  </div> -->
+</div>
+<!-- https://www.census.gov/programs-surveys/geography/about/glossary.html#par_textimage_12 -->
+<div id="tooltip">tooltip</div>
+<div class="section" id="counties">
+	<div class="sectionTitle">There are <strong>3,222</strong> Counties</div>
+	<div class="sectionIntro">
+	Counties are perhaps the largest geography within each state that we will work with using Census data.
+	Most Census data are available on the county level.
+	</div>
+	<div id="counties_chart"></div>
+	<div id="c_area"></div>
+	<div id="c_density"></div>
+</div>
+<div class="section" id="tracts">
+	<div class="sectionTitle">There are <strong>74,003 Tracts</strong></div>
+<div class="sectionIntro">Census Tracts are small, relatively permanent statistical subdivisions of a county or equivalent entity ...
+	<br>
+	576 tracts have no residents
+	</div>
+	<div id="tracts_chart"></div>
+	<div id="t_area"></div>
+	<div id="t_density"></div>
+</div>
+<div class="section" id="blockGroups">
+	<div class="sectionTitle">There are <strong>220,335 Block Groups</strong></div>
+<div class="sectionIntro">Block Groups (BGs) are statistical divisions of census tracts, are generally defined to contain between 600 and 3,000 people, and are used to present data and control block numbering...
+	<br>
+	930 block groups have no residents
+</div>
+	<div id="blockGroups_chart"></div>
+	<div id="bg_area"></div>
+	<div id="bg_density"></div>
+</div>
+<div class="section" id="blocks">
+	<div class="sectionTitle">There are <strong>11,453,047 Census Blocks</strong></div>
+	<div class="sectionIntro">Generally, census blocks are small in area; for example, a block in a city bounded on all sides by streets. Census blocks in suburban and rural areas may be large, irregular, and bounded by a variety of features, such as roads, streams, and transmission lines. In remote areas, census blocks may encompass hundreds of square miles...
+	<br>
+	4,897,539 blocks have no residents
+</div>
+	<div id="blocks_chart"></div>
+	<div id="b_area"></div>
+	<div id="b_density"></div>
+</div>
+<script>
+	var colors = ["#40b390","#269382","#1a746f","#195658"]
+	var layers = ["blocks","blockGroups","tracts","counties"]
+	var colorDictionary = {}
+	for(var i in layers){
+		d3.select("#"+layers[i]).style('color',colors[i])
+		colorDictionary[layers[i]]=colors[i]
+	}
+</script>
+
+
+<!-- <script type="text/javascript" src="centroids.js"></script> -->
+<script type="text/javascript" src="censusGeography.js"></script>
+
+
+</body>
+</html>
