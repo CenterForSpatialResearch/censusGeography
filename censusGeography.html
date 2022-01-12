@@ -39,26 +39,60 @@
 			font-size:11px;
 		}
         #title{
-          font-size:36px;
+          font-size:30px;
+		  letter-spacing:2px;
 			font-weight:100;
+			margin:10px;
+        }
+        #subtitle{
+            font-size:14px;
+			font-weight:100;
+			margin-left:10px;
         }
 		.sectionTitle{
-			font-size:16px;
-			width:300px;
+			font-size:24px;
+			padding:10px;
 		}
 		.section{
 			margin:20px;
 		}
 		.sectionIntro{
-			width:400px;
+			width:600px;
 		}
 		#tooltip{
 			visibility:hidden;
-			position:absolute;
+			position:fixed;
 			z-index:1;
 			width:80px;
-			background-color:rgba(255,255,255,.8);
+			background-color:rgba(255,255,255,1);
 			padding:5px;
+			filter: drop-shadow(1px 1px 4px rgba(0,0,0,.6));
+		}
+		.list_item{
+			width:100px;
+			display:inline-block;
+			vertical-align:top;
+		}
+		.list_image{
+			width:100px;
+			height:100px;
+			display:inline-block;
+		}
+		.list_label{
+			width:100px;
+			height:40px;
+			padding:5px;
+		}
+		img{
+			height:100px;
+		}
+		.list{
+			margin-top:10px;
+		}
+		.list_title{
+			font-size:20px;
+		}
+		.section{
 		}
 </style>
 
@@ -68,64 +102,65 @@
 
 <div id="intro">
 <div id="title">Census Geography</div>
-<!-- <div id="subtitle">Here is a quick overview of 4 types of Census Geography -  </div> -->
+<div id="subtitle">Some basics about 4 layers of nested Census Geography.</div>
+<div id="diagram"></div>
 </div>
 <!-- https://www.census.gov/programs-surveys/geography/about/glossary.html#par_textimage_12 -->
 <div id="tooltip">tooltip</div>
 <div class="section" id="counties">
-	<div class="sectionTitle">There are <strong>3,222</strong> Counties</div>
+	<div class="sectionTitle" id="counties_title">There are <strong>3,222</strong> Counties</div>
 	<div class="sectionIntro">
-	Counties are perhaps the largest geography within each state that we will work with using Census data.
-	Most Census data are available on the county level.
+	<i>This count includes 78 municipios in Puerto Rico, as well as other statistical equvilents on the mainland (Parishes, etc.).</i>
 	</div>
 	<div id="counties_chart"></div>
-	<div id="c_area"></div>
+	<div id="counties_list" class="list">
+		
+		</div>
 	<div id="c_density"></div>
 </div>
 <div class="section" id="tracts">
-	<div class="sectionTitle">There are <strong>74,003 Tracts</strong></div>
-<div class="sectionIntro">Census Tracts are small, relatively permanent statistical subdivisions of a county or equivalent entity ...
-	<br>
-	576 tracts have no residents
-	</div>
+	<div class="sectionTitle" id="tracts_title">There are <strong>74,003 Tracts</strong></div>
+
 	<div id="tracts_chart"></div>
-	<div id="t_area"></div>
+<div class="sectionIntro">
+	<!-- *576 tracts have no residents -->
+	</div> 
+	<div id="tracts_list"></div>
 	<div id="t_density"></div>
 </div>
 <div class="section" id="blockGroups">
-	<div class="sectionTitle">There are <strong>220,335 Block Groups</strong></div>
-<div class="sectionIntro">Block Groups (BGs) are statistical divisions of census tracts, are generally defined to contain between 600 and 3,000 people, and are used to present data and control block numbering...
-	<br>
-	930 block groups have no residents
+	<div class="sectionTitle" id="blockGroups_title">There are <strong>220,335 Block Groups</strong></div>
+<div class="sectionIntro">
+	<!-- *930 block groups have no residents -->
 </div>
 	<div id="blockGroups_chart"></div>
-	<div id="bg_area"></div>
+	<div id="blockGroups_list"></div>
 	<div id="bg_density"></div>
 </div>
 <div class="section" id="blocks">
-	<div class="sectionTitle">There are <strong>11,453,047 Census Blocks</strong></div>
-	<div class="sectionIntro">Generally, census blocks are small in area; for example, a block in a city bounded on all sides by streets. Census blocks in suburban and rural areas may be large, irregular, and bounded by a variety of features, such as roads, streams, and transmission lines. In remote areas, census blocks may encompass hundreds of square miles...
-	<br>
-	4,897,539 blocks have no residents
+	<div class="sectionTitle" id="blocks_title">There are <strong>11,453,047 Blocks</strong></div>
+	<div class="sectionIntro">
+	<!-- *4,897,539 blocks have no residents -->
 </div>
 	<div id="blocks_chart"></div>
-	<div id="b_area"></div>
+	<div id="blocks_list"></div>
 	<div id="b_density"></div>
 </div>
 <script>
-	var colors = ["#40b390","#269382","#1a746f","#195658"]
-	var layers = ["blocks","blockGroups","tracts","counties"]
+	var colors = ["#6476d5","#42b26e","#c99132","#d54a4c"]
+	var layers = ["counties","tracts","blockGroups","blocks"]
 	var colorDictionary = {}
 	for(var i in layers){
-		d3.select("#"+layers[i]).style('color',colors[i])
+		d3.select("#"+layers[i]+"_title").style('background-color',colors[i])
+		.style("color","#fff")
 		colorDictionary[layers[i]]=colors[i]
 	}
+	//console.log(colorDictionary)
 </script>
 
-
-<!-- <script type="text/javascript" src="centroids.js"></script> -->
+<script type="text/javascript" src="draw_nest_example.js"></script>
+<script type="text/javascript" src="tops_bottoms.js"></script>
 <script type="text/javascript" src="censusGeography.js"></script>
-
 
 </body>
 </html>

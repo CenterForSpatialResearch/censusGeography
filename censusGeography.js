@@ -1,23 +1,45 @@
 var geos =["counties","tracts","blockGroups","blocks"]
-var columns = ["SE_T002_001"]//,"SE_T002_002","SE_T002_006"]
+var columns = ["SE_T002_001","SE_T002_002","SE_T002_006"]
 var files = []
-var root = "../data/histogram/"
+var root = "histogram/"
 var chartList = []
 var dataDictionary = {"SE_T002_001":"Total Population",
-            "SE_T002_002":"Population Density (per sq. mile)",
-            "SE_T002_006":"Area (Land)"}
+            "SE_T002_002":"Population Density (Persons Per Square Mile)",
+            "SE_T002_006":"Land Area in Square Miles"}
 			
-var totals = {
-	blocks:11453047,
-	blockGroups:220335,
-	tracts:74003,
-	counties:3222	
-}
+	var totals = {
+		SE_T002_001:
+			{blocks:11453047,
+			blockGroups:220335,
+			tracts:74003,
+			counties:3222},
+		SE_T002_002:
+			{blocks:11453047,
+			blockGroups:220335,
+			tracts:74003,
+			counties:3222},
+		SE_T002_006:
+			{blocks:11453047,
+			blockGroups:220335,
+			tracts:74003,
+			counties:3222}	
+	}
 var zeros ={
-	blocks:4897549,
-	blockGroups:930,
-	tracts:576,
-	counties:0	
+	SE_T002_001:
+		{blocks:4897549,
+		blockGroups:930,
+		tracts:576,
+		counties:0},
+	SE_T002_002:
+		{blocks:4897549,
+		blockGroups:930,
+		tracts:576,
+		counties:0},
+	SE_T002_006:
+		{blocks:4897549,
+		blockGroups:930,
+		tracts:576,
+		counties:0}
 }
 
 for(var g in geos){
@@ -25,7 +47,7 @@ for(var g in geos){
 	for(var c in columns){
 		var column = columns[c]
 		var fileName = geo+"_"+column+".csv"
-		console.log(fileName)
+		//console.log(fileName)
 		files.push(d3.csv(root+fileName))
 		chartList.push([geo,column])
 	}
@@ -53,23 +75,59 @@ function getOutliers(data,limit){
 Promise.all(files)
 .then(function(d){
 	var xStops = {
-		"SE_T002_001":{counties:100,tracts:180,blockGroups:80,blocks:31}
+		"SE_T002_001":{counties:50,tracts:180,blockGroups:80,blocks:31},
+		"SE_T002_002":{counties:240,tracts:100,blockGroups:80,blocks:31},
+		"SE_T002_006":{counties:60,tracts:60,blockGroups:40,blocks:15}
+	}
+	//
+	 //console.log(chartList)
+	// console.log(d)
+	
+	for(var c in chartList){
+		//console.log(chartList[c][0])
+		barGraph(d[c],chartList[c][1],chartList[c][0],xStops[chartList[c][1]][chartList[c][0]])	
+		var tops = tops_bottoms[chartList[c][0]+"_"+chartList[c][1]+"_top"]
+		var bottoms = tops_bottoms[chartList[c][0]+"_"+chartList[c][1]+"_bottom"]
+		
+		drawList(bottoms,chartList[c][0],chartList[c][1],"#top")
+		drawList(tops,chartList[c][0],chartList[c][1],"#bottom")
+	}		
+})
+function drawList(list,geo,column,divName){
+	//console.log(geo+"_list",column)	
+	var listDiv = d3.select("#"+geo+"_"+column).append("div").attr("id",divName)
+	if(divName=="#top"){
+		listDiv.append("div").html("What do "+geo+" look like when they have a lot of residents?").attr("class","list_title")
+	}else{
+		listDiv.append("div").html("When they have a few?").attr("class","list_title")
+		
 	}
 	
-	console.log(chartList)
-	console.log(d)
-	for(var c in chartList){
-		console.log(chartList[c][0])
-		barGraph(d[c],chartList[c][1],chartList[c][0],xStops[chartList[c][1]][chartList[c][0]])	
-	}	
-})
-
+	for(var i in list.slice(0,10)){
+		//console.log(geo,column)
+		var listItem = listDiv.append("div").attr("class","list_item")
+		//console.log(list[i])
+		listItem.append("div")
+		.attr("class","list_image")
+		.html("<img src=\"test.png\">")
+		// .append("svg:image")
+// 		.attr("xlink:href","test.png")
+        //
+        // .attr("width", 100)
+        // .attr("height", 100)
+		
+		listItem.append("div")
+		.attr("class","list_label")
+		.html(list[i].name+"<br>"+dataDictionary[column]+": "+list[i].value)
+	}
+}
 function barGraph(data,column,geo,maxXbin){
+//	console.log(maxXbin)
 	var outliers = getOutliers(data,maxXbin)
 	//console.log(outliers)
 	var height = 200
-	var width = 600
-	var padding = 60
+	var width = 400
+	var padding = 55
 	
 
 	var yMax =d3.max(data, function(d){return parseInt(d.quantity)})
@@ -103,16 +161,38 @@ function barGraph(data,column,geo,maxXbin){
 	})
 	
 	var svg = d3.select("#"+geo+"_chart")
+		.append("div").attr("id",geo+"_"+column)
 		.append("svg")
 		.attr("width",width+padding*2)
 		.attr("height",height+padding*2)
 	
-	svg.append("text").text(toTitleCase(geo)+" "+dataDictionary[column]).attr("x",width/2).attr("y",height+padding+30)
-	svg.append("text").text("# of "+toTitleCase(geo)).attr("x",padding*2).attr("y",0)
-	.attr("transform","rotate(90)")
+	svg.append("text").text(dataDictionary[column]+" for "+toTitleCase(geo))
+	.attr("x",0).attr("y",25)
+	.style("font-size","16px")
 	
-	d3.select("#"+geo).append("div")
-	.html(Math.round(outliers/totals[geo]*10000)/100+"% ("+outliers+") "+geo+" have "+dataDictionary[column]+" that is higher than "+maxXbin*interval)
+	svg.append("text").text(toTitleCase(geo)+" "+dataDictionary[column])
+	.attr("x",width/2).attr("y",height+padding*1.6).attr('text-anchor',"middle")
+	.attr("fill",colorDictionary[geo])
+	
+	svg.append("text").text("# of "+toTitleCase(geo)).attr("x",0).attr("y",45)
+	.attr("fill",colorDictionary[geo])
+	//.attr("transform","rotate(90)")
+	
+	d3.select("#"+geo+"_chart").append("div")
+	.html(
+		function(){
+			var text = "<i><strong>Off the chart:</strong></i><br>"
+	+Math.round(outliers/totals[column][geo]*10000)/100+"% ("+outliers+") "+geo+" have "
+	+dataDictionary[column]+" that is higher than "+maxXbin*interval+"."
+			
+			if(zeros[column][geo]>0){
+				text+="<br>"+zeros[column][geo]+" "+geo+" have zero "+dataDictionary[column]+"."
+			}
+			
+			return text
+			
+		}
+	)
 	// .attr("text-anchor","end")
 // 	.attr("x",width+padding).attr("y",height/2)
 	
@@ -139,7 +219,7 @@ function barGraph(data,column,geo,maxXbin){
 		.attr("width",width/maxXbin-1)
 		.attr("fill",colorDictionary[geo])
 		.attr("transform","translate("+padding+","+padding+")")
-		.attr("opacity",.6)
+		.attr("opacity",.8)
 		.on("mouseover",function(d){
 			d3.select(this).attr("opacity",1)
 			var text = d.quantity+" "+geo+" have between "+d.startValue+"-"+d.endValue+" "+dataDictionary[column]
@@ -150,7 +230,7 @@ function barGraph(data,column,geo,maxXbin){
 			.html(text)
 		})
 		.on("mouseout",function(d){
-			d3.select(this).attr("opacity",.6)
+			d3.select(this).attr("opacity",.8)
 
 			d3.select("#tooltip")
 			.style("visibility","hidden")
