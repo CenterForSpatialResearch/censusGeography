@@ -144,7 +144,7 @@ function drawList(list,geo,column,divName){
 
 		listItem.append("div")
 		.attr("class","list_label")
-		.html(list[i].name+"<br>"+dataDictionary[column]+": "+list[i].value)
+		.html(list[i].fips+"<br>"+dataDictionary[column]+": "+list[i].value)
 	}
 }
 function barGraph(data,column,geo,maxXbin){
