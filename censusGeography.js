@@ -1,5 +1,5 @@
 var geos =["counties","tracts","blockGroups","blocks"]
-var geos =["counties","tracts","blockGroups"]
+//var geos =["counties","tracts","blockGroups"]
 var columns = ["SE_T002_001","SE_T002_006","SE_T002_002"]
 var files = []
 var root = "histogram/"
@@ -82,8 +82,8 @@ Promise.all(files)
 .then(function(d){
 	var xStops = {
 		"SE_T002_001":{counties:50,tracts:180,blockGroups:80,blocks:31},
-		"SE_T002_002":{counties:240,tracts:100,blockGroups:80,blocks:31},
-		"SE_T002_006":{counties:60,tracts:60,blockGroups:40,blocks:15}
+		"SE_T002_006":{counties:60,tracts:60,blockGroups:40,blocks:15},
+		"SE_T002_002":{counties:240,tracts:100,blockGroups:100,blocks:31}
 	}
 	//
 	 //console.log(chartList)
@@ -148,6 +148,8 @@ function drawList(list,geo,column,divName){
 	}
 }
 function barGraph(data,column,geo,maxXbin){
+	
+	
 //	console.log(maxXbin)
 	var outliers = getOutliers(data,maxXbin)
 	//console.log(outliers)
