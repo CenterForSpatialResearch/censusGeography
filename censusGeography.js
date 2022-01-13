@@ -1,10 +1,11 @@
 var geos =["counties","tracts","blockGroups","blocks"]
-var columns = ["SE_T002_001","SE_T002_002","SE_T002_006"]
+var geos =["counties","tracts","blockGroups"]
+var columns = ["SE_T002_001","SE_T002_006","SE_T002_002"]
 var files = []
 var root = "histogram/"
 var chartList = []
 var dataDictionary = {"SE_T002_001":"Total Population",
-            "SE_T002_002":"Population Density (Persons Per Square Mile)",
+            "SE_T002_002":"Population Density",
             "SE_T002_006":"Land Area in Square Miles"}
 			
 	var totals = {
@@ -57,7 +58,12 @@ var rangeMarkers = {
 		counties:[[0,99999],[100000,1000000]]
 	}
 }
-
+var uniqueStates = {
+	"counties":[],
+	"tracts":[],
+	"blockGroups":[],
+	"blocks":[]
+}
 function getOutliers(data,limit){
 	var outliers = 0
 	for(var i in data){
@@ -84,38 +90,58 @@ Promise.all(files)
 	// console.log(d)
 	
 	for(var c in chartList){
-		//console.log(chartList[c][0])
-		barGraph(d[c],chartList[c][1],chartList[c][0],xStops[chartList[c][1]][chartList[c][0]])	
+		//console.log(chartList[c])
+		d3.select("#"+chartList[c][0]+"_chart").append("div").attr("id",chartList[c][0]+"_"+chartList[c][1])
+		.attr("class","topic_section")
+		.style("border","1px dotted "+colorDictionary[chartList[c][0]])
+		.style("margin-bottom","5px")
+		.style("margin-top","5px")
+		.style("padding","5px")
+		barGraph(d[c],chartList[c][1],chartList[c][0],xStops[chartList[c][1]][chartList[c][0]])
 		var tops = tops_bottoms[chartList[c][0]+"_"+chartList[c][1]+"_top"]
 		var bottoms = tops_bottoms[chartList[c][0]+"_"+chartList[c][1]+"_bottom"]
 		
 		drawList(bottoms,chartList[c][0],chartList[c][1],"#top")
 		drawList(tops,chartList[c][0],chartList[c][1],"#bottom")
-	}		
+	}	
+	//console.log(uniqueStates)
 })
+
+var dataTitleDictionary = {"SE_T002_001":"Total Population",
+            "SE_T002_002":"Population Density (Persons Per Square Mile)",
+            "SE_T002_006":"Land Area in Square Miles"
+}
 function drawList(list,geo,column,divName){
 	//console.log(geo+"_list",column)	
 	var listDiv = d3.select("#"+geo+"_"+column).append("div").attr("id",divName)
 	if(divName=="#top"){
-		listDiv.append("div").html("What do "+geo+" look like when they have a lot of residents?").attr("class","list_title")
-	}else{
-		listDiv.append("div").html("When they have a few?").attr("class","list_title")
+		listDiv.append("div")
+		.html("<span class=\"highlight\">What do "+geo+" look like when they have the highest "+dataDictionary[column]+"?</span>")
+		.attr("class","list_title")
+		.style("color", colorDictionary[geo])
 		
+	}else{
+		listDiv.append("div").html("<span class=\"highlight\">When they have lowest "+dataDictionary[column]+"?</span>")
+		.attr("class","list_title")
+		.style("color", colorDictionary[geo])
 	}
 	
-	for(var i in list.slice(0,10)){
+	for(var i in list.slice(0,5)){
 		//console.log(geo,column)
 		var listItem = listDiv.append("div").attr("class","list_item")
 		//console.log(list[i])
 		listItem.append("div")
 		.attr("class","list_image")
-		.html("<img src=\"test.png\">")
+		.html("<img src=\"images/"+geo+"/"+list[i]["fips"]+".png\">")
 		// .append("svg:image")
 // 		.attr("xlink:href","test.png")
         //
         // .attr("width", 100)
         // .attr("height", 100)
-		
+		var state = list[i].name.split(",")[list[i].name.split(",").length-1]
+		//console.log(state)
+		//uniqueStates[geo].push(list[i].fips)
+
 		listItem.append("div")
 		.attr("class","list_label")
 		.html(list[i].name+"<br>"+dataDictionary[column]+": "+list[i].value)
@@ -160,15 +186,19 @@ function barGraph(data,column,geo,maxXbin){
 		return d
 	})
 	
-	var svg = d3.select("#"+geo+"_chart")
+	var svg = d3.select("#"+geo+"_"+column)
 		.append("div").attr("id",geo+"_"+column)
 		.append("svg")
 		.attr("width",width+padding*2)
 		.attr("height",height+padding*2)
 	
-	svg.append("text").text(dataDictionary[column]+" for "+toTitleCase(geo))
+	
+	var singular = {tracts:"Tract",counties:"County",blocks:"Block",blockGroups:"Block Group"}
+	svg.append("text").text(dataDictionary[column]+" by "+singular[geo])
 	.attr("x",0).attr("y",25)
-	.style("font-size","16px")
+	.style("font-size","24px")
+		.style("fill", colorDictionary[geo])
+	
 	
 	svg.append("text").text(toTitleCase(geo)+" "+dataDictionary[column])
 	.attr("x",width/2).attr("y",height+padding*1.6).attr('text-anchor',"middle")
@@ -178,24 +208,20 @@ function barGraph(data,column,geo,maxXbin){
 	.attr("fill",colorDictionary[geo])
 	//.attr("transform","rotate(90)")
 	
-	d3.select("#"+geo+"_chart").append("div")
-	.html(
-		function(){
-			var text = "<i><strong>Off the chart:</strong></i><br>"
-	+Math.round(outliers/totals[column][geo]*10000)/100+"% ("+outliers+") "+geo+" have "
-	+dataDictionary[column]+" that is higher than "+maxXbin*interval+"."
-			
-			if(zeros[column][geo]>0){
-				text+="<br>"+zeros[column][geo]+" "+geo+" have zero "+dataDictionary[column]+"."
-			}
-			
-			return text
-			
-		}
-	)
 	// .attr("text-anchor","end")
 // 	.attr("x",width+padding).attr("y",height/2)
-	
+	d3.select("#"+geo+"_"+column).append("div")
+	.html(
+		function(){
+			var text = "<i>Off the chart: </i>"
+	+Math.round(outliers/totals[column][geo]*10000)/100+"% ("+outliers+") "+geo+" have "
+	+dataDictionary[column]+" that is higher than "+maxXbin*interval+". "
+			if(zeros[column][geo]>0){
+				text+=zeros[column][geo]+" "+geo+" have zero "+dataDictionary[column]+"."
+			}
+			return text
+		}
+	)
 	svg.append("g").attr("transform","translate("+padding+","+(padding+height)+")")
 	.call(xAxis)
 	

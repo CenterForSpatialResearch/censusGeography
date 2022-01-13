@@ -17,10 +17,10 @@ Promise.all(files)
 	var svg = 	d3.select("#diagram").append("svg").attr("width",width).attr("height",height)
 	
 	var labelPosition={
-		counties:{x:40,y:100},
-		tracts:{x:40,y:120},
-		blockGroups:{x:40,y:140},
-		blocks:{x:40,y:160}		
+		counties:{text:"County",x:40,y:100},
+		tracts:{text:"Tract",x:40,y:120},
+		blockGroups:{text:"Block Group",x:40,y:140},
+		blocks:{text:"Block",x:40,y:160}		
 	}
 	
 	svg.append("text").text("An example of how").attr("x",20).attr("y",60)
@@ -34,7 +34,7 @@ Promise.all(files)
 		var color = colorDictionary[layer]
 		drawOutline(l,data[l],countyProjection,svg,layer)
 		
-		var label = data[l].features[0].properties["NAMELSAD10"]
+		var label = labelPosition[layer].text//data[l].features[0].properties["NAMELSAD10"]
 		if(label==undefined){
 			label = "Block "+data[l].features[0].properties["BLOCKCE10"]
 		}
