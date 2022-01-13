@@ -61,8 +61,8 @@ function drawOutline(index,data, countyProjection,svg,className){
     svg.append("path")
         .attr("d", path(data))
         .attr("fill", colorDictionary[className])
-        .attr("stroke",colorDictionary[className])
+        .attr("stroke","#fff")
 		.attr("id",className)
 	.attr("opacity",1)
-	 .attr("stroke-width","2px")    
+	 .attr("stroke-width","0px")    
 }
