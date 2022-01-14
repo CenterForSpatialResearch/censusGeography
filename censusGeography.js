@@ -111,6 +111,7 @@ var dataTitleDictionary = {"SE_T002_001":"Total Population",
             "SE_T002_002":"Population Density (Persons Per Square Mile)",
             "SE_T002_006":"Land Area in Square Miles"
 }
+var blocksOnly = []
 function drawList(list,geo,column,divName){
 	//console.log(geo+"_list",column)	
 	var listDiv = d3.select("#"+geo+"_"+column).append("div").attr("id",divName)
@@ -132,7 +133,7 @@ function drawList(list,geo,column,divName){
 		//console.log(list[i])
 		listItem.append("div")
 		.attr("class","list_image")
-		.html("<img src=\"images/"+geo+"/"+list[i]["fips"]+".png\">")
+		.html("<img src=\"images/resized/"+list[i]["fips"]+".png\">")
 		// .append("svg:image")
 // 		.attr("xlink:href","test.png")
         //
@@ -144,7 +145,22 @@ function drawList(list,geo,column,divName){
 
 		listItem.append("div")
 		.attr("class","list_label")
-		.html(list[i].fips+"<br>"+dataDictionary[column]+": "+list[i].value)
+		.html(list[i].name+"<br>"+dataDictionary[column]+": "+list[i].value)
+		
+		//(8) [' California', ' Arizona', ' Alabama', ' Alaska', ' Arkansas', ' Maryland', ' North Carolina', ' Florida']
+		
+		//'060290046011000', '040210020022000', '040210008031059', '060290043021001', '060730113001029', '010010201001005', '010010201001009', '010010201002014', '010010203001015', '010010206001031', '022900001002000', '021220001001009', '022610002001000', '021050003001000', '020680001002474', '050619501002262', '050930103003058', '060372628021007', '060379301011048', '060590423332010', '245102603015025', '060014311002003', '371830532072036', '120850003001030', '010730129132006', '021880001003000', '020700001001001', '021850002003205', '022900001001000', '020500003002127'
+		
+		// if(geo=="blocks"){
+		// 	console.log()
+		// 	var fips = list[i].fips
+		// 	var state = list[i].name.split(",")[list[i].name.split(",").length-1]
+		// 	if(blocksOnly.indexOf(fips)==-1){
+		// 		blocksOnly.push(fips)
+		// 	}
+		//}
+		// console.log(blocksOnly)
+		
 	}
 }
 function barGraph(data,column,geo,maxXbin){
