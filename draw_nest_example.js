@@ -7,8 +7,8 @@ var files = [
 var projection = null
 Promise.all(files)
 .then(function(data){
-	var width = 500
-	var height = 500
+	var width = 350
+	var height = 350
 	var padding = 20
 	
 	var county = data[0]
@@ -17,16 +17,16 @@ Promise.all(files)
 	var svg = 	d3.select("#diagram").append("svg").attr("width",width).attr("height",height)
 	
 	var labelPosition={
-		counties:{text:"County",x:40,y:100},
-		tracts:{text:"Tract",x:40,y:120},
-		blockGroups:{text:"Block Group",x:40,y:140},
-		blocks:{text:"Block",x:40,y:160}		
+		counties:{text:"County",x:40,y:75},
+		tracts:{text:"Tract",x:40,y:95},
+		blockGroups:{text:"Block Group",x:40,y:115},
+		blocks:{text:"Block",x:40,y:135}		
 	}
 	
-	svg.append("text").text("An example of how").attr("x",20).attr("y",60)
+	svg.append("text").text("An example of how").attr("x",20).attr("y",35)
 		.style("font-size","14px")
 	
-	svg.append("text").text("geographies are nested").attr("x",20).attr("y",75)
+	svg.append("text").text("geographies are nested").attr("x",20).attr("y",50)
 		.style("font-size","14px")
 	
 	for(var l in layers){

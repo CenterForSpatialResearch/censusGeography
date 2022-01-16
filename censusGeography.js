@@ -164,7 +164,7 @@ function drawList(list,geo,column,divName){
 	}
 }
 function barGraph(data,column,geo,maxXbin){
-	
+	console.log(data.length)
 	
 //	console.log(maxXbin)
 	var outliers = getOutliers(data,maxXbin)
@@ -247,13 +247,20 @@ function barGraph(data,column,geo,maxXbin){
 	.attr("transform","translate("+padding+","+padding+")")
 	.call(yAxis)
 	
+	var quarterLength = data.length/4
+	var tally = 0
+	var quantiles = []
+	
 	svg.selectAll(".bars")
 		.data(data)
 		.enter()
 		.append("rect")
 		.attr("id","bars")
 		.attr("x",function(d,i){return xScale(i)})
-		.attr("y",function(d,i){return height- yScale(d.quantity)})
+		.attr("y",function(d,i){
+			
+			return height- yScale(d.quantity)
+		})
 		.attr("height",function(d,i){
 			if(i>maxXbin-1){
 				return 0

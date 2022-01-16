@@ -39,7 +39,7 @@
 			font-size:11px;
 		}
         #title{
-          font-size:30px;
+          font-size:36px;
 		  letter-spacing:2px;
 			font-weight:100;
 			margin:10px;
@@ -48,6 +48,7 @@
             font-size:14px;
 			font-weight:100;
 			margin-left:10px;
+			line-height:150%;
         }
 		.sectionTitle{
 			font-size:24px;
@@ -105,17 +106,30 @@
 			height:100%;
 			background-color:rgba(255,0,0,.5);
 		}
+		#intro{
+			width:250px;
+			height:300px;
+			border:1px dotted black;
+			padding:10px;
+			margin:20px;
+		}
+		#diagram{
+			position:absolute;
+			left:300px;
+			top:0px;
+		}
 </style>
 
 </head>
 
 <body>
 <!-- <div id="largeImage">image</div> -->
+
 <div id="intro">
-<div id="title">Census Geography</div>
-<div id="subtitle">Using Census data for <strong>population, area, and density</strong> to explain 4 nested Census geographies: <strong>county, tract, block group, and block</strong>.</div>
-<div id="diagram"></div>
+<div id="title">Census<br>Geography</div>
+<div id="subtitle"><br>Using Census data for <strong>population, area, and density</strong> to explain 4 nested Census geographies: <strong>county, tract, block group, and block</strong>.</div>
 </div>
+<div id="diagram"></div>
 <!-- https://www.census.gov/programs-surveys/geography/about/glossary.html#par_textimage_12 -->
 <div id="tooltip">tooltip</div>
 
