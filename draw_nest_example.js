@@ -17,16 +17,16 @@ Promise.all(files)
 	var svg = 	d3.select("#diagram").append("svg").attr("width",width).attr("height",height)
 	
 	var labelPosition={
-		counties:{text:"County",x:40,y:75},
-		tracts:{text:"Tract",x:40,y:95},
-		blockGroups:{text:"Block Group",x:40,y:115},
-		blocks:{text:"Block",x:40,y:135}		
+		counties:{text:"County",x:40,y:70},
+		tracts:{text:"Tract",x:40,y:90},
+		blockGroups:{text:"Block Group",x:40,y:110},
+		blocks:{text:"Block",x:40,y:130}		
 	}
 	
-	svg.append("text").text("An example of how").attr("x",20).attr("y",35)
+	svg.append("text").text("An example of how").attr("x",20).attr("y",30)
 		.style("font-size","14px")
 	
-	svg.append("text").text("geographies are nested").attr("x",20).attr("y",50)
+	svg.append("text").text("geographies are nested").attr("x",20).attr("y",45)
 		.style("font-size","14px")
 	
 	for(var l in layers){
