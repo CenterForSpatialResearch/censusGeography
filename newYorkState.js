@@ -1,5 +1,5 @@
 var geos =["counties","tracts","blockGroups","blocks"]
-var geos =["blocks"]
+// var geos =["blocks"]
 var columns = ["SE_T002_001","SE_T002_006","SE_T002_002"]
 var files = []
 var root = "histogram_nys/"
@@ -145,7 +145,7 @@ function drawList(list,geo,column,divName){
 
 		listItem.append("div")
 		.attr("class","list_label")
-		.html(list[i].name+"<br>"+dataDictionary[column]+": "+list[i].value)
+		.html(list[i].fips+"<br>"+dataDictionary[column]+": "+list[i].value)
 		
 		//(8) [' California', ' Arizona', ' Alabama', ' Alaska', ' Arkansas', ' Maryland', ' North Carolina', ' Florida']
 		
