@@ -1,4 +1,4 @@
-var geos =["counties","tracts","blockGroups","blocks"]
+var geos =["counties","tracts","blockGroups","blocks","zipcodes"]
 //var geos =["counties","tracts","blockGroups"]
 var columns = ["SE_T002_001","SE_T002_006","SE_T002_002"]
 var files = []
@@ -13,34 +13,42 @@ var dataDictionary = {"SE_T002_001":"Total Population",
 			{blocks:11453047,
 			blockGroups:220335,
 			tracts:74003,
-			counties:3222},
+			counties:3222,
+			zipcodes:33120},
 		SE_T002_002:
 			{blocks:11453047,
 			blockGroups:220335,
 			tracts:74003,
-			counties:3222},
+			counties:3222,
+			zipcodes:33120},
+				
 		SE_T002_006:
 			{blocks:11453047,
 			blockGroups:220335,
 			tracts:74003,
-			counties:3222}	
+			counties:3222,
+				zipcodes:33120}
+					
 	}
 var zeros ={
 	SE_T002_001:
 		{blocks:4897549,
 		blockGroups:930,
 		tracts:576,
-		counties:0},
+		counties:0,
+		zipcodes:344},
 	SE_T002_002:
 		{blocks:4897549,
 		blockGroups:930,
 		tracts:576,
-		counties:0},
+		counties:0,
+		zipcodes:344},
 	SE_T002_006:
 		{blocks:4897549,
 		blockGroups:930,
 		tracts:576,
-		counties:0}
+		counties:0,
+		zipcodes:344}
 }
 
 for(var g in geos){
@@ -62,7 +70,8 @@ var uniqueStates = {
 	"counties":[],
 	"tracts":[],
 	"blockGroups":[],
-	"blocks":[]
+	"blocks":[],
+	"zipcodes":[]
 }
 function getOutliers(data,limit){
 	var outliers = 0
@@ -81,9 +90,9 @@ function getOutliers(data,limit){
 Promise.all(files)
 .then(function(d){
 	var xStops = {
-		"SE_T002_001":{counties:50,tracts:180,blockGroups:80,blocks:31},
-		"SE_T002_006":{counties:60,tracts:60,blockGroups:40,blocks:15},
-		"SE_T002_002":{counties:240,tracts:100,blockGroups:100,blocks:31}
+		"SE_T002_001":{counties:50,tracts:180,blockGroups:80,blocks:31,zipcodes:180},
+		"SE_T002_006":{counties:60,tracts:60,blockGroups:40,blocks:15,zipcodes:180},
+		"SE_T002_002":{counties:240,tracts:100,blockGroups:100,blocks:31,zipcodes:150}
 	}
 	//
 	 //console.log(chartList)
@@ -133,7 +142,16 @@ function drawList(list,geo,column,divName){
 		//console.log(list[i])
 		listItem.append("div")
 		.attr("class","list_image")
-		.html("<img src=\"images/resized/"+list[i]["fips"]+".png\">")
+		.html(function(){
+			if(geo=="zipcodes"){
+				console.log("zip")
+				return"<img src=\"images/resized/"+list[i]["name"].replace("ZCTA5 ","ZCTA5CE10_")+".png\">"
+			}else{
+				return"<img src=\"images/resized/"+list[i]["fips"]+".png\">"
+			}
+		}
+			
+			)
 		// .append("svg:image")
 // 		.attr("xlink:href","test.png")
         //
@@ -170,7 +188,7 @@ function barGraph(data,column,geo,maxXbin){
 	var outliers = getOutliers(data,maxXbin)
 	//console.log(outliers)
 	var height = 200
-	var width = 400
+	var width = 700
 	var padding = 55
 	
 

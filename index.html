@@ -127,11 +127,22 @@
 
 <div id="intro">
 <div id="title">Census<br>Geography</div>
-<div id="subtitle"><br>Using Census data for <strong>population, area, and density</strong> to explain 4 nested Census geographies: <strong>county, tract, block group, and block</strong>.</div>
+<div id="subtitle"><br>Using basic Census data for <strong>population, area, and density</strong> to better understand 4 nested Census geographies- <strong>county, tract, block group, and block</strong>  and 1 additional geography <strong>ZCTA</strong>.</div>
 </div>
 <div id="diagram"></div>
 <!-- https://www.census.gov/programs-surveys/geography/about/glossary.html#par_textimage_12 -->
 <div id="tooltip">tooltip</div>
+
+<div class="section" id="zipcodes">
+	<div class="sectionTitle" id="zipcodes_title">There are <strong>33,120 ZIP Code Tabulation Areas(ZCTA)</strong></div>
+	<div class="sectionIntro">
+	<i>A ZIP code is not the same as a ZIP Code Tabulation Area. There are 42,000+ ZIP Codes.</i>
+</div>
+	<div id="zipcodes_chart"></div>
+	<div id="zipcodes_list"></div>
+	<div id="z_density"></div>
+</div>
+
 
 <div class="section" id="counties">
 	<div class="sectionTitle" id="counties_title">There are <strong>3,222</strong> Counties</div>
@@ -144,6 +155,9 @@
 		</div>
 	<div id="c_density"></div>
 </div>
+
+
+
 <div class="section" id="tracts">
 	<div class="sectionTitle" id="tracts_title">There are <strong>74,003 Tracts</strong></div>
 
@@ -172,9 +186,10 @@
 	<div id="blocks_list"></div>
 	<div id="b_density"></div>
 </div>
+
 <script>
-	var colors = ["#61bd7a","#e6aa3b","#d25437","#5187d9"]
-	var layers = ["counties","tracts","blockGroups","blocks"]
+	var colors = ["#61bd7a","#e6aa3b","#d25437","#5187d9","black"]
+	var layers = ["counties","tracts","blockGroups","blocks","zipcodes"]
 	var colorDictionary = {}
 	for(var i in layers){
 		d3.select("#"+layers[i]+"_title").style('background-color',colors[i])
