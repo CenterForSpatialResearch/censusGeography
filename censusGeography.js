@@ -229,7 +229,7 @@ function barGraph(data,column,geo,maxXbin){
 		.attr("height",height+padding*2)
 	
 	
-	var singular = {tracts:"Tract",counties:"County",blocks:"Block",blockGroups:"Block Group"}
+	var singular = {tracts:"Tract",counties:"County",blocks:"Block",blockGroups:"Block Group",zipcodes:"ZCTA"}
 	svg.append("text").text(dataDictionary[column]+" by "+singular[geo])
 	.attr("x",0).attr("y",25)
 	.style("font-size","24px")
