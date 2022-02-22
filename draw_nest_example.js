@@ -8,7 +8,7 @@ var files = [
 var projection = null
 Promise.all(files)
 .then(function(data){
-	var width = 350
+	var width = 450
 	var height = 350
 	var padding = 20
 	
@@ -25,10 +25,10 @@ Promise.all(files)
 		zipcodes:{text:"ZCTA",x:30,y:135}		
 	}
 	
-	svg.append("text").text("An example of how").attr("x",20).attr("y",35)
+	svg.append("text").text("Example of relationship").attr("x",20).attr("y",35)
 		.style("font-size","14px")
 	
-	svg.append("text").text("geographies are nested").attr("x",20).attr("y",50)
+	svg.append("text").text("between 5 geographies").attr("x",20).attr("y",50)
 		.style("font-size","14px")
 	
 	for(var l in layers){
